@@ -10,9 +10,7 @@ export default class Edit extends Component {
   finishEdit = (e) => {
     const value = e.target.value;
     if (this.props.onEdit) {
-      const newLane = this.props.laneProp;
-      newLine.name = value.trim();
-      this.props.onEdit(newLane);
+      this.props.onEdit(value.trim());
     }
   };
   renderDelete = () => {

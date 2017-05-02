@@ -3,8 +3,6 @@ import Lanes from '../Lane/Lanes';
 import styles from '../Kanban/Kanban.css';
 import DevTools from '../App/components/DevTools';
 
-
-
 const Kanban = (props) => {
   return (
     <div>
@@ -23,8 +21,6 @@ const Kanban = (props) => {
     </div>
   );
 };
-
-
 
 Kanban.propTypes = {
   createLaneServ: PropTypes.func,

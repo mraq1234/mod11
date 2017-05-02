@@ -29,7 +29,8 @@ export function updateNote(note) {
 export function deleteNote(noteId, laneId) {
   return {
     type: DELETE_NOTE,
-    noteId, laneId,
+    noteId,
+    laneId,
   };
 }
 

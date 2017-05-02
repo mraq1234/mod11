@@ -1,12 +1,13 @@
 import Kanban from './Kanban';
 import { connect } from 'react-redux';
 import { createLaneServ, fetchLanes } from '../Lane/LaneActions';
+import { getLanes, getNotes } from './KanbanSelectors';
 
 Kanban.need = [() => { return fetchLanes(); }];
 
 const mapStateToProps = state => ({
-  lanes: Object.values(state.lanes),
-  notes: Object.values(state.notes),
+  lanes: getLanes(state),
+  notes: getNotes(state),
 });
 
 const mapDispatchToProps = {
