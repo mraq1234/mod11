@@ -18,42 +18,36 @@ export function addNote(req, res) {
         return lane.save();
       })
       .then(() => {
-        res.json(saved);
+        res.json({ saved, laneId: req.params.laneId });
       });
   });
 }
 
 export function updateNoteTask(req, res) {
-  Note.findOne({ id: req.params.noteId }).exec((err, note) => {
-    if (err) res.status(500).send(err);
-    note.task = req.body.task; // eslint-disable-line
-    note.save((error, saved) => {
-      if (error) res.status(500).send(error);
-      res.json({ note: saved });
+  Note.findOneAndUpdate(
+    { id: req.params.noteId },
+    { task: req.body.task },
+    { new: true })
+    .exec((err, note) => {
+      if (err) res.status(500).send(err);
+      else res.json({ note });
     });
-  });
 }
 
 export function deleteNote(req, res) {
-  Note.findOne({ id: req.params.noteId }).exec((err, note) => {
-    if (err || !note) {
-      res.status(500).send(err || "ERROR: Can't find note!");
-      return;
-    }
-    note.remove((error, deleted) => {
-      if (error) res.status(500).send(error);
-      Lane.findOne({ id: req.params.laneId })
+  Note.findOneAndRemove({ id: req.params.noteId }, req).exec((err, note) => {
+    if (err) res.status(500).send(err);
+    Lane.findOne({ id: req.params.laneId })
       .then(lane => {
         lane.notes = lane.notes.filter((noteId) => { // eslint-disable-line
-          if (noteId.toString() !== deleted._id.toString()) {
-            return noteId;
-          }
+          if (noteId.toString() !== note._id.toString()) return noteId;
         });
-        return lane.save();
-      })
-      .then(() => res.json(note))
-      .catch((removeErr) => res.status(500).send(removeErr));
-    });
+        lane.save((errLane, saved) => {
+          if (errLane) res.status(500).send(errLane);
+          res.json({ saved });
+        });
+      });
   });
 }
+
 

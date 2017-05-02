@@ -10,7 +10,7 @@ export function addLane(req, res) {
   newLane.id = uuid();
   newLane.save((err, saved) => {
     if (err) res.status(500).send(err);
-    res.json({ lane: saved });
+    res.json({ saved });
   });
 }
 
@@ -31,13 +31,16 @@ export function deleteLane(req, res) {
   });
 }
 
+// export function deleteLane(req, res) {
+//   Lane.findOneAndRemove({ id: req.params.laneId }).exec((err) => {
+//     if (err) res.status(500).send(err);
+//     else res.status(200).end();
+//   });
+// }
+
 export function updateLaneName(req, res) {
-  Lane.findOne({ id: req.params.laneId }).exec((err, lane) => {
+  Lane.findOneAndUpdate({ id: req.params.laneId }, { name: req.body.name }, { new: true }).exec((err, lane) => {
     if (err) res.status(500).send(err);
-    lane.name = req.body.name; // eslint-disable-line
-    lane.save((error, saved) => {
-      if (error) res.status(500).send(error);
-      res.json({ lane: saved });
-    });
+    else res.json({ lane });
   });
 }
