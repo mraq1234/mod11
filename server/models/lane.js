@@ -20,12 +20,12 @@ const laneSchema = new Schema({
   },
 });
 
-laneSchema.pre('find', function (next) {
+laneSchema.pre('find', function (next) {  // eslint-disable-line
   this.populate('notes');
   next();
 });
 
-laneSchema.pre('remove', function (next) {
+laneSchema.pre('remove', function (next) {  // eslint-disable-line
   const idsArray = this.notes;
   const removeLineNotesPromise = new Promise((resolve, reject) => {
     Note.remove({ _id: { $in: idsArray } }, (err) => {

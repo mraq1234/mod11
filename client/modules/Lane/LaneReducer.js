@@ -12,8 +12,9 @@ export default function lanes(state = initialState, action) {
       return { ...state, [action.lane.id]: action.lane };
     case CREATE_LANES:
       return { ...action.lanes };
-    case DELETE_LANE:
+    case DELETE_LANE: {
       return _.omit(state, action.id);
+    }
     case ADD_NOTE: {
       const newLane = state[action.laneId];
       const lineNotesArray = [...newLane.notes, action.note.id];

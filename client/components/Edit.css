@@ -3,5 +3,7 @@
 
 }
 .value {
-
+    width:230px;
+    box-sizing: border-box;
+    display: inline-block;
 }

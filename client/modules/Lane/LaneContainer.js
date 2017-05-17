@@ -5,7 +5,7 @@ import { createNote, addNoteServ } from '../Note/NoteActions';
 
 // const mapStateToProps = (state, ownProps) => {
 //   return {
-//     laneNotes: ownProps.lane.notes,
+//     lane: ownProps.lane,
 //   };
 // };
 

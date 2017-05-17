@@ -24,6 +24,7 @@ export default class Edit extends Component {
         defaultValue={this.props.value}
         onBlur={this.finishEdit}
         onKeyPress={this.checkEnter}
+        selected
       />
     );
   };

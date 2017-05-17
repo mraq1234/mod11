@@ -26,7 +26,9 @@ export function deleteLane(req, res) {
     if (err) res.status(500).send(err);
     lane.remove((error) => {
       if (error) res.status(500).send(error);
-      else res.status(200).end();
+      else {
+        res.json({ lane });
+      }
     });
   });
 }

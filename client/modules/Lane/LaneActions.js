@@ -49,17 +49,26 @@ export function updateLane(lane) {
   };
 }
 
-export function deleteLane(id) {
+export function updateLaneServ(lane) {
+  return (dispatch) => {
+    return callApi(`/lanes/${lane.id}`, 'put', { name: lane.name }).then(() => {
+      return dispatch(updateLane(lane));
+    });
+  };
+}
+
+export function deleteLane(id, notesId) {
   return {
     type: DELETE_LANE,
     id,
+    notesId,
   };
 }
 
 export function deleteLaneServ(id) {
   return (dispatch) => {
-    return callApi(`lanes/${id}`, 'delete').then(() => {
-      dispatch(deleteLane(id));
+    return callApi(`lanes/${id}`, 'delete').then((res) => {
+      dispatch(deleteLane(id, res.lane.notes));
     });
   };
 }

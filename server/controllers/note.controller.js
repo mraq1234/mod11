@@ -49,5 +49,3 @@ export function deleteNote(req, res) {
       });
   });
 }
-
-

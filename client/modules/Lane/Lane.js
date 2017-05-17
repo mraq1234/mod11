@@ -7,7 +7,7 @@ class Lane extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      editing: false
+      editing: false,
     };
   }
 
@@ -15,25 +15,15 @@ class Lane extends Component {
     const { lane, ...props } = this.props;
     const laneId = lane.id;
     return (
-      <div>
+      <div className={styles.lane}>
         <div className={styles.LaneHeader}>
-          <div
-            className={styles.LaneAddNote}
-            onClick={() => props.updateLane(lane)}
-          >
-            <button
-              onClick={props.addNoteServ.bind(this, laneId)}
-            >
-              +
-            </button>
-          </div>
           <Edit
             className={styles.LaneName}
             editing={this.state.editing}
             value={lane.name}
             onValueClick={() => this.setState({ editing: true })}
             onEdit={value => {
-              props.updateLane(Object.assign({}, lane, { name: value }));
+              props.updateLaneServ(Object.assign({}, lane, { name: value }));
               this.setState({ editing: false });
             }}
           />
@@ -42,10 +32,20 @@ class Lane extends Component {
           </div>
         </div>
         <NotesContainer laneId={lane.id} />
+        <div
+          className={styles.LaneAddNote}
+          onClick={() => props.updateLane(lane)}
+        >
+          <button
+            onClick={props.addNoteServ.bind(this, laneId)}
+          >
+            ADD TASK
+          </button>
+        </div>
       </div>
     );
   }
-};
+}
 
 Lane.propTypes = {
   lane: PropTypes.object,
