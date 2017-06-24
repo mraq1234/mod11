@@ -2,7 +2,8 @@ import React, { PropTypes } from 'react';
 import Note from './Note';
 import styles from './Note.css';
 
-const Notes = ({ notes, ...props }) => {
+const Notes = (props) => {
+  const { notes, laneId, attachNote, moveNote } = props;
   return (
     <ul className={styles.notes}>
       {notes.map((note) => {
@@ -10,13 +11,16 @@ const Notes = ({ notes, ...props }) => {
           <Note
             key={note.id}
             note={note}
-            laneId={props.laneId}
-            deleteNote={props.deleteNoteServ}
-            updateNote={props.updateNoteServ}
+            laneId={laneId}
+            moveNote={moveNote}
+            attachNote={attachNote}
+            {...props}
           />
         );
       }
-      )}</ul>);
+      )}
+    </ul>
+  );
 };
 
 
@@ -25,6 +29,8 @@ Notes.propTypes = {
   notes: PropTypes.array,
   deleteNoteServ: PropTypes.func,
   updateNoteServ: PropTypes.func,
+  moveNote: PropTypes.func,
+  attachNote: PropTypes.func,
 };
 
 export default Notes;

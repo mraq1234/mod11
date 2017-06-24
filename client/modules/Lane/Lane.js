@@ -12,10 +12,11 @@ class Lane extends Component {
   }
 
   render() {
-    const { lane, ...props } = this.props;
+    const { connectDragSource, connectDropTargetNote, connectDropTargetLane, isDragging, lane, ...props } = this.props;
     const laneId = lane.id;
-    return (
-      <div className={styles.lane}>
+    const dragSource = this.state.editing ? a => a : connectDragSource;
+    return dragSource(connectDropTargetLane(connectDropTargetNote(
+      <div style={{ opacity: isDragging ? 0 : 1 }} className={styles.lane}>
         <div className={styles.LaneHeader}>
           <Edit
             className={styles.LaneName}
@@ -43,7 +44,7 @@ class Lane extends Component {
           </button>
         </div>
       </div>
-    );
+    )));
   }
 }
 
@@ -53,6 +54,10 @@ Lane.propTypes = {
   deleteLaneServ: PropTypes.func,
   updateLane: PropTypes.func,
   addNote: PropTypes.func,
+  connectDragSource: PropTypes.func,
+  connectDropTargetNote: PropTypes.func,
+  connectDropTargetLane: PropTypes.func,
+  isDragging: PropTypes.bool,
 };
 
 export default Lane;

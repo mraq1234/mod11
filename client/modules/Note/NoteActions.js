@@ -4,26 +4,19 @@ export const CREATE_NOTES = 'CREATE_NOTES';
 export const UPDATE_NOTE = 'UPDATE_NOTE';
 export const DELETE_NOTE = 'DELETE_NOTE';
 export const ADD_NOTE = 'ADD_NOTE';
-// Export Actions
+export const MOVE_NOTE = 'MOVE_NOTE';
+export const ATTACH_NOTE = 'ATTACH_NOTE';
+
 export function createNote(note) {
-  return {
-    type: CREATE_NOTE,
-    note,
-  };
+  return { type: CREATE_NOTE, note };
 }
 
 export function createNotes(notes) {
-  return {
-    type: CREATE_NOTES,
-    notes,
-  };
+  return { type: CREATE_NOTES, notes };
 }
 
 export function updateNote(note) {
-  return {
-    type: UPDATE_NOTE,
-    note,
-  };
+  return { type: UPDATE_NOTE, note };
 }
 
 export function updateNoteServ(noteId, task) {
@@ -35,11 +28,7 @@ export function updateNoteServ(noteId, task) {
 }
 
 export function deleteNote(noteId, laneId) {
-  return {
-    type: DELETE_NOTE,
-    noteId,
-    laneId,
-  };
+  return { type: DELETE_NOTE, noteId, laneId };
 }
 
 export function deleteNoteServ(noteId, laneId) {
@@ -51,10 +40,7 @@ export function deleteNoteServ(noteId, laneId) {
 }
 
 export function addNote(note, laneId) {
-  return {
-    type: ADD_NOTE,
-    note, laneId,
-  };
+  return { type: ADD_NOTE, note, laneId };
 }
 
 export function addNoteServ(laneId) {
@@ -65,3 +51,6 @@ export function addNoteServ(laneId) {
   };
 }
 
+export function moveNote(targetNote, sourceNote, targetLaneId, sourceLaneId) {
+  return { type: MOVE_NOTE, targetNoteId: targetNote.id, sourceNoteId: sourceNote.id, targetLaneId, sourceLaneId };
+}
