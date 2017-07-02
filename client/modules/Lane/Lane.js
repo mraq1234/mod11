@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import NotesContainer from '../Note/NoteContainer';
 import Edit from '../../components/Edit';
 import styles from './Lane.css';
+import drgIco from './drag.png';
 
 class Lane extends Component {
   constructor(props) {
@@ -12,12 +13,15 @@ class Lane extends Component {
   }
 
   render() {
-    const { connectDragSource, connectDropTargetNote, connectDropTargetLane, isDragging, lane, ...props } = this.props;
+    const { connectDragSource, connectDragPreview, connectDropTargetNote, connectDropTargetLane, isDragging, lane, ...props } = this.props;
     const laneId = lane.id;
     const dragSource = this.state.editing ? a => a : connectDragSource;
-    return dragSource(connectDropTargetLane(connectDropTargetNote(
+    return connectDragPreview(connectDropTargetLane(connectDropTargetNote(
       <div style={{ opacity: isDragging ? 0 : 1 }} className={styles.lane}>
         <div className={styles.LaneHeader}>
+          {dragSource(
+            <div style={{ background: `#b0b0b0 url(${drgIco}) center` }} className={styles.LaneHandler} />
+          )}
           <Edit
             className={styles.LaneName}
             editing={this.state.editing}
@@ -29,13 +33,13 @@ class Lane extends Component {
             }}
           />
           <div className={styles.LaneDelete}>
-            <button onClick={props.deleteLaneServ.bind(this, lane.id)}>x</button>
+            <button onClick={props.deleteLaneServ.bind(this, lane.id)}> x </button>
           </div>
         </div>
         <NotesContainer laneId={lane.id} />
         <div
           className={styles.LaneAddNote}
-          onClick={() => props.updateLane(lane)}
+          // onClick={() => props.updateLane(lane)}
         >
           <button
             onClick={props.addNoteServ.bind(this, laneId)}
@@ -58,6 +62,7 @@ Lane.propTypes = {
   connectDropTargetNote: PropTypes.func,
   connectDropTargetLane: PropTypes.func,
   isDragging: PropTypes.bool,
+  connectDragPreview: PropTypes.func,
 };
 
 export default Lane;

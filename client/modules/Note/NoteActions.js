@@ -51,6 +51,7 @@ export function addNoteServ(laneId) {
   };
 }
 
-export function moveNote(targetNote, sourceNote, targetLaneId, sourceLaneId) {
-  return { type: MOVE_NOTE, targetNoteId: targetNote.id, sourceNoteId: sourceNote.id, targetLaneId, sourceLaneId };
+export function moveNote(targetNoteId, sourceNoteId, targetLaneId, sourceLaneId) {
+  return { type: MOVE_NOTE, targetNoteId, sourceNoteId, targetLaneId, sourceLaneId };
 }
+

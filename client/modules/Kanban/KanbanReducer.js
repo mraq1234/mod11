@@ -1,5 +1,4 @@
 // Import Actions
-// Initial State
 const initialState = {};
 
 const KanbanReducer = (state = initialState, action) => {

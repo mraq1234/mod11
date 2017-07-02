@@ -10,16 +10,19 @@ const noteTarget = {
   hover(targetProps, monitor) {
     const sourceProps = monitor.getItem();
     if (!targetProps.lane.notes.length) {
-      targetProps.moveNote('', sourceProps.note, targetProps.lane.id, sourceProps.laneId);
+      targetProps.moveNote('', sourceProps.note.id, targetProps.lane.id, sourceProps.laneId);
     }
   },
 };
 
 const laneTarget = {
   hover(targetProps, monitor) {
-    if (targetProps.laneId === monitor.getItem().laneId) {
+    const sourceLaneId = monitor.getItem().laneId;
+    const targetLaneId = targetProps.lane.id;
+    if (targetLaneId === sourceLaneId) {
       return;
     }
+    targetProps.moveLane(sourceLaneId, targetLaneId);
   },
 };
 
@@ -30,7 +33,6 @@ const laneSource = {
     };
   },
   isDragging(props, monitor) {
-    // console.log('props.laneId, monitor.getItem().laneId', props, ' ', monitor.getItem());
     return props.lane.id === monitor.getItem().laneId;
   },
 };
@@ -43,6 +45,7 @@ const mapDispatchToProps = {
 export default compose(
   connect(null, mapDispatchToProps),
   DragSource(ItemTypes.LANE, laneSource, (connect, monitor) => ({ // eslint-disable-line
+    connectDragPreview: connect.dragPreview(),
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging(),
   })),

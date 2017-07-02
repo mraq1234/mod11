@@ -48,27 +48,31 @@ const noteSource = {
     return props.note.id === monitor.getItem().note.id;
   },
   endDrag(props, monitor) {
-    const sourceLaneId = props.laneId;
-    let targetLaneId = monitor.getDropResult() ? monitor.getDropResult().targetLaneId : '';
-    const sourceLaneNotes = props.lanes[sourceLaneId].notes.map(note => {
-      return props.allNotes[note]._id;
-    });
-    let targetLaneNotes = '';
-    if (targetLaneId) {
-      targetLaneNotes = props.lanes[targetLaneId].notes.map(note => {
+    function mapNotesId(laneId) {
+      return props.lanes[laneId].notes.map(note => {
         return props.allNotes[note]._id;
       });
+    }
+
+    const sourceLaneId = props.laneId;
+    const sourceLaneNotes = mapNotesId(sourceLaneId);
+    let targetLaneId = monitor.getDropResult() ? monitor.getDropResult().targetLaneId : '';
+    let targetLaneNotes = '';
+
+    if (targetLaneId) {
+      targetLaneNotes = mapNotesId(targetLaneId);
     } else {
       _.forEach(props.lanes, (val, key) => {
         if (props.lanes[key].notes.indexOf(props.note.id) >= 0) {
-          targetLaneNotes = props.lanes[key].notes.map(note => {
-            return props.allNotes[note]._id;
-          });
+          targetLaneNotes = mapNotesId(key);
           targetLaneId = props.lanes[key].id;
+          return false;
         }
+        return true;
       });
     }
-    callApi('lanes', 'put', { sourceLaneNotes, targetLaneNotes, sourceLaneId, targetLaneId });
+    callApi('lanes', 'put', { sourceLaneNotes, targetLaneNotes, sourceLaneId, targetLaneId })
+    .catch(err => console.error(err)); // eslint-disable-line no-console
   },
 };
 
@@ -77,7 +81,8 @@ const noteTarget = {
     const { note, laneId } = targetProps;
     const sourceNote = monitor.getItem().note;
     if (sourceNote.id !== note.id) {
-      targetProps.moveNote(note, sourceNote, laneId, monitor.getItem().laneId);
+      targetProps.moveNote(note.id, sourceNote.id, laneId, monitor.getItem().laneId);
+      monitor.getItem().laneId = laneId; // eslint-disable-line no-param-reassign
     }
   },
   drop(props) {

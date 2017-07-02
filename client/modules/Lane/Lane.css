@@ -2,6 +2,15 @@
 .LaneHeader {
     display: flex;
 }
+
+.LaneHandler {
+    background: grey;
+    width: 1em;
+    height: 1em;
+    margin-top: 7px;
+    margin-left: 7px;
+    cursor: move;
+}
 .LaneHeader span {
     text-align: center;
 }
@@ -30,9 +39,10 @@
 }
 .LaneName{
     padding-top:10px;
-    width: 250px;
+    width: 220px;
 }
 .LaneDelete{
-    padding-top:5px;
+    margin-top: 8px;
+    margin-right: 10px;
     display: inline-block;
 }
