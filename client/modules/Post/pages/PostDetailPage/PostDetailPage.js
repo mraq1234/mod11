@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import propTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
@@ -38,12 +39,12 @@ function mapStateToProps(state, props) {
 }
 
 PostDetailPage.propTypes = {
-  post: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    content: PropTypes.string.isRequired,
-    slug: PropTypes.string.isRequired,
-    cuid: PropTypes.string.isRequired,
+  post: propTypes.shape({
+    name: propTypes.string.isRequired,
+    title: propTypes.string.isRequired,
+    content: propTypes.string.isRequired,
+    slug: propTypes.string.isRequired,
+    cuid: propTypes.string.isRequired,
   }).isRequired,
 };
 

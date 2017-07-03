@@ -1,5 +1,6 @@
-import React, { PropTypes, Component } from 'react';
-import NotesContainer from '../Note/NoteContainer';
+import React, { Component } from 'react';
+import propTypes from 'prop-types';
+import NoteList from '../Note/NoteListContainer';
 import Edit from '../../components/Edit';
 import styles from './Lane.css';
 import drgIco from './drag.png';
@@ -13,37 +14,52 @@ class Lane extends Component {
   }
 
   render() {
-    const { connectDragSource, connectDragPreview, connectDropTargetNote, connectDropTargetLane, isDragging, lane, ...props } = this.props;
+    const {
+      connectDragSource,
+      connectDragPreview,
+      connectDropTargetNote,
+      connectDropTargetLane,
+      isDragging,
+      deleteLaneServ,
+      addNoteServ,
+      updateLaneServ,
+      lane,
+    } = this.props;
     const laneId = lane.id;
     const dragSource = this.state.editing ? a => a : connectDragSource;
     return connectDragPreview(connectDropTargetLane(connectDropTargetNote(
-      <div style={{ opacity: isDragging ? 0 : 1 }} className={styles.lane}>
+      <div
+        style={{
+          opacity: isDragging ? 0 : 1,
+        }}
+        className={styles.lane}
+      >
         <div className={styles.LaneHeader}>
-          {dragSource(
-            <div style={{ background: `#b0b0b0 url(${drgIco}) center` }} className={styles.LaneHandler} />
-          )}
+          {dragSource(<div
+            style={{
+              background: `#b0b0b0 url(${drgIco}) center`,
+            }}
+            className={styles.LaneHandler}
+          />)}
           <Edit
             className={styles.LaneName}
             editing={this.state.editing}
             value={lane.name}
             onValueClick={() => this.setState({ editing: true })}
             onEdit={value => {
-              props.updateLaneServ(Object.assign({}, lane, { name: value }));
+              updateLaneServ(Object.assign({}, lane, { name: value }));
               this.setState({ editing: false });
             }}
           />
           <div className={styles.LaneDelete}>
-            <button onClick={props.deleteLaneServ.bind(this, lane.id)}> x </button>
+            <button onClick={() => deleteLaneServ(lane.id)}>
+              x
+            </button>
           </div>
         </div>
-        <NotesContainer laneId={lane.id} />
-        <div
-          className={styles.LaneAddNote}
-          // onClick={() => props.updateLane(lane)}
-        >
-          <button
-            onClick={props.addNoteServ.bind(this, laneId)}
-          >
+        <NoteList laneId={lane.id} />
+        <div className={styles.LaneAddNote}>
+          <button onClick={() => addNoteServ(laneId)}>
             ADD TASK
           </button>
         </div>
@@ -53,17 +69,17 @@ class Lane extends Component {
 }
 
 Lane.propTypes = {
-  lane: PropTypes.object,
-  laneNotes: PropTypes.array,
-  deleteLaneServ: PropTypes.func,
-  updateLane: PropTypes.func,
-  addNote: PropTypes.func,
-  connectDragSource: PropTypes.func,
-  connectDropTargetNote: PropTypes.func,
-  connectDropTargetLane: PropTypes.func,
-  isDragging: PropTypes.bool,
-  connectDragPreview: PropTypes.func,
+  lane: propTypes.object,
+  laneNotes: propTypes.array,
+  deleteLaneServ: propTypes.func,
+  updateLane: propTypes.func,
+  addNoteServ: propTypes.func,
+  updateLaneServ: propTypes.func,
+  connectDragSource: propTypes.func,
+  connectDropTargetNote: propTypes.func,
+  connectDropTargetLane: propTypes.func,
+  isDragging: propTypes.bool,
+  connectDragPreview: propTypes.func,
 };
 
 export default Lane;
-

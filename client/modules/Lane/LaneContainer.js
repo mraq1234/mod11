@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import Lane from './Lane';
-import * as laneActions from './LaneActions';
-import { createNote, addNoteServ, moveNote } from '../Note/NoteActions';
+import { deleteLaneServ, updateLaneServ, moveLane } from './LaneActions';
+import { addNoteServ, moveNote } from '../Note/NoteActions';
 import { compose } from 'redux';
 import { DropTarget, DragSource } from 'react-dnd';
 import ItemTypes from '../Kanban/itemTypes';
@@ -11,6 +11,7 @@ const noteTarget = {
     const sourceProps = monitor.getItem();
     if (!targetProps.lane.notes.length) {
       targetProps.moveNote('', sourceProps.note.id, targetProps.lane.id, sourceProps.laneId);
+      monitor.getItem().laneId = targetProps.lane.id; // eslint-disable-line no-param-reassign
     }
   },
 };
@@ -38,8 +39,11 @@ const laneSource = {
 };
 
 const mapDispatchToProps = {
-  ...laneActions,
-  createNote, addNoteServ, moveNote,
+  deleteLaneServ,
+  addNoteServ,
+  updateLaneServ,
+  moveNote,
+  moveLane,
 };
 
 export default compose(

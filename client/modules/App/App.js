@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import propTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 // Import Style
@@ -64,9 +65,9 @@ export class App extends Component {
 }
 
 App.propTypes = {
-  children: PropTypes.object.isRequired,
-  dispatch: PropTypes.func.isRequired,
-  intl: PropTypes.object.isRequired,
+  children: propTypes.object.isRequired,
+  dispatch: propTypes.func.isRequired,
+  intl: propTypes.object.isRequired,
 };
 
 // Retrieve data from store as props

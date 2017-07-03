@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import propTypes from 'prop-types';
 import Lanes from '../Lane/Lanes';
 import styles from '../Kanban/Kanban.css';
 import DevTools from '../App/components/DevTools';
@@ -23,9 +24,9 @@ const Kanban = (props) => {
 };
 
 Kanban.propTypes = {
-  createLaneServ: PropTypes.func,
-  lanes: PropTypes.array,
-  notes: PropTypes.array,
+  createLaneServ: propTypes.func,
+  lanes: propTypes.array,
+  notes: propTypes.array,
 };
 
 export default Kanban;

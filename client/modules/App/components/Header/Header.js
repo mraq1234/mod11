@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import propTypes from 'prop-types';
 import { Link } from 'react-router';
 import { FormattedMessage } from 'react-intl';
 
@@ -37,9 +38,9 @@ Header.contextTypes = {
 };
 
 Header.propTypes = {
-  toggleAddPost: PropTypes.func.isRequired,
-  switchLanguage: PropTypes.func.isRequired,
-  intl: PropTypes.object.isRequired,
+  toggleAddPost: propTypes.func.isRequired,
+  switchLanguage: propTypes.func.isRequired,
+  intl: propTypes.object.isRequired,
 };
 
 export default Header;

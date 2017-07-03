@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import styles from './Edit.css';
 
 export default class Edit extends Component {
@@ -39,10 +40,9 @@ export default class Edit extends Component {
     );
   };
   render() {
-    const { editing, ...props } = this.props;
-
+    const { editing } = this.props;
     return (
-      <div {...props}>
+      <div>
         {editing ? this.renderEdit() : this.renderValue()}
       </div>
     );

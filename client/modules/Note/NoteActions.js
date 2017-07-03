@@ -20,8 +20,8 @@ export function updateNote(note) {
 }
 
 export function updateNoteServ(noteId, task) {
-  return (dispatch) => {
-    return callApi(`/notes/${noteId}`, 'put', { task }).then((res) => {
+  return dispatch => {
+    return callApi(`/notes/${noteId}`, 'put', { task }).then(res => {
       return dispatch(updateNote(res.note));
     });
   };
@@ -32,7 +32,7 @@ export function deleteNote(noteId, laneId) {
 }
 
 export function deleteNoteServ(noteId, laneId) {
-  return (dispatch) => {
+  return dispatch => {
     return callApi(`lanes/${laneId}/notes/${noteId}`, 'delete').then(() => {
       return dispatch(deleteNote(noteId, laneId));
     });
@@ -44,14 +44,26 @@ export function addNote(note, laneId) {
 }
 
 export function addNoteServ(laneId) {
-  return (dispatch) => {
-    return callApi(`lanes/${laneId}/notes`, 'post', { task: 'new task' }).then((res) => {
+  return dispatch => {
+    return callApi(`lanes/${laneId}/notes`, 'post', {
+      task: 'new task',
+    }).then(res => {
       return dispatch(addNote(res.saved, res.laneId));
     });
   };
 }
 
-export function moveNote(targetNoteId, sourceNoteId, targetLaneId, sourceLaneId) {
-  return { type: MOVE_NOTE, targetNoteId, sourceNoteId, targetLaneId, sourceLaneId };
+export function moveNote(
+  targetNoteId,
+  sourceNoteId,
+  targetLaneId,
+  sourceLaneId
+) {
+  return {
+    type: MOVE_NOTE,
+    targetNoteId,
+    sourceNoteId,
+    targetLaneId,
+    sourceLaneId,
+  };
 }
-
