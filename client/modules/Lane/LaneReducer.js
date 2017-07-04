@@ -27,48 +27,46 @@ export default function lanes(state = initialState, action) {
       return _.omit(state, action.id);
     }
     case ADD_NOTE: {
-      const newLane = Object.assign({}, state[action.laneId]);
-      const lineNotesArray = [...newLane.notes, action.note.id];
-      newLane.notes = lineNotesArray;
+      const newLane = { ...state[action.laneId] };
+      newLane.notes = [...newLane.notes, action.note.id];
       return {
         ...state,
         [action.laneId]: newLane,
       };
     }
     case DELETE_NOTE: {
-      const newLane = Object.assign({}, state[action.laneId]);
-      const lineNotesArray = _.without(
+      const newLane = { ...state[action.laneId] };
+      newLane.notes = _.without(
         state[action.laneId].notes,
         action.noteId
       );
-      newLane.notes = lineNotesArray;
       return {
         ...state,
         [action.laneId]: newLane,
       };
     }
     case MOVE_NOTE: {
-      const srcIdx = _.indexOf(
+      const sourceIndex = _.indexOf(
         state[action.sourceLaneId].notes,
         action.sourceNoteId
       );
-      const trgIdx = _.indexOf(
+      const targetIndex = _.indexOf(
         state[action.targetLaneId].notes,
         action.targetNoteId
       );
-      const newSourceLane = Object.assign({}, state[action.sourceLaneId]);
+      const newSourceLane = { ...state[action.sourceLaneId] };
       if (action.sourceLaneId !== action.targetLaneId) {
-        const newTargetLane = Object.assign({}, state[action.targetLaneId]);
-        newSourceLane.notes.splice(srcIdx, 1);
-        newTargetLane.notes.splice(trgIdx, 0, action.sourceNoteId);
+        const newTargetLane = { ...state[action.targetLaneId] };
+        newSourceLane.notes.splice(sourceIndex, 1);
+        newTargetLane.notes.splice(targetIndex, 0, action.sourceNoteId);
         return {
           ...state,
           [action.sourceLaneId]: newSourceLane,
           [action.targetLaneId]: newTargetLane,
         };
       }
-      newSourceLane.notes.splice(srcIdx, 1);
-      newSourceLane.notes.splice(trgIdx, 0, action.sourceNoteId);
+      newSourceLane.notes.splice(sourceIndex, 1);
+      newSourceLane.notes.splice(targetIndex, 0, action.sourceNoteId);
       return {
         ...state,
         [action.sourceLaneId]: newSourceLane,

@@ -3,7 +3,8 @@ import propTypes from 'prop-types';
 import NoteList from '../Note/NoteListContainer';
 import Edit from '../../components/Edit';
 import styles from './Lane.css';
-import drgIco from './drag.png';
+import dragIcon from './drag.png';
+import _ from 'lodash';
 
 class Lane extends Component {
   constructor(props) {
@@ -16,18 +17,23 @@ class Lane extends Component {
   render() {
     const {
       connectDragSource,
-      connectDragPreview,
-      connectDropTargetNote,
-      connectDropTargetLane,
       isDragging,
       deleteLaneServ,
       addNoteServ,
       updateLaneServ,
       lane,
+      ...props,
     } = this.props;
-    const laneId = lane.id;
+
     const dragSource = this.state.editing ? a => a : connectDragSource;
-    return connectDragPreview(connectDropTargetLane(connectDropTargetNote(
+    const composedDndElement = _.flowRight([
+      props.connectDragPreview,
+      props.connectDropTargetLane,
+      props.connectDropTargetNote,
+    ]);
+    const laneId = lane.id;
+
+    return composedDndElement(
       <div
         style={{
           opacity: isDragging ? 0 : 1,
@@ -35,19 +41,21 @@ class Lane extends Component {
         className={styles.lane}
       >
         <div className={styles.LaneHeader}>
-          {dragSource(<div
-            style={{
-              background: `#b0b0b0 url(${drgIco}) center`,
-            }}
-            className={styles.LaneHandler}
-          />)}
+          {dragSource(
+            <div
+              style={{
+                background: `#b0b0b0 url(${dragIcon}) center`,
+              }}
+              className={styles.LaneHandler}
+            />
+          )}
           <Edit
             className={styles.LaneName}
             editing={this.state.editing}
             value={lane.name}
             onValueClick={() => this.setState({ editing: true })}
             onEdit={value => {
-              updateLaneServ(Object.assign({}, lane, { name: value }));
+              updateLaneServ({ ...lane, name: value });
               this.setState({ editing: false });
             }}
           />
@@ -64,7 +72,7 @@ class Lane extends Component {
           </button>
         </div>
       </div>
-    )));
+    );
   }
 }
 

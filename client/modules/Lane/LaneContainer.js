@@ -5,6 +5,7 @@ import { addNoteServ, moveNote } from '../Note/NoteActions';
 import { compose } from 'redux';
 import { DropTarget, DragSource } from 'react-dnd';
 import ItemTypes from '../Kanban/itemTypes';
+import _ from 'lodash';
 
 const noteTarget = {
   hover(targetProps, monitor) {

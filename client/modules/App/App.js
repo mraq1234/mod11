@@ -30,7 +30,6 @@ export class App extends Component {
   };
 
   render() {
-    return (
       <div>
         {this.state.isMounted && !window.devToolsExtension && process.env.NODE_ENV === 'development' && <DevTools />}
         <div>
@@ -59,8 +58,7 @@ export class App extends Component {
           </div>
           <Footer />
         </div>
-      </div>
-    );
+      </div>;
   }
 }
 

@@ -2,9 +2,8 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { DragSource, DropTarget } from 'react-dnd';
 import Note from './Note';
-import { updateNoteServ, deleteNoteServ, moveNote } from '../Note/NoteActions';
+import { updateNoteServ, deleteNoteServ, moveNote, moveNoteServ } from '../Note/NoteActions';
 import ItemTypes from '../Kanban/itemTypes';
-import callApi from '../../util/apiCaller';
 import _ from 'lodash';
 
 const noteSource = {
@@ -42,7 +41,7 @@ const noteSource = {
         return true;
       });
     }
-    callApi('lanes', 'put', { sourceLaneNotes, targetLaneNotes, sourceLaneId, targetLaneId });
+    props.moveNoteServ(sourceLaneNotes, targetLaneNotes, sourceLaneId, targetLaneId);
   },
 };
 
@@ -71,7 +70,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-  updateNoteServ, deleteNoteServ, moveNote,
+  updateNoteServ, deleteNoteServ, moveNote, moveNoteServ,
 };
 
 export default compose(
