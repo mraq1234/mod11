@@ -1,4 +1,4 @@
-import { CREATE_NOTE, CREATE_NOTES, UPDATE_NOTE, DELETE_NOTE, ADD_NOTE } from './NoteActions';
+import { CREATE_NOTE, CREATE_NOTES, UPDATE_NOTE, DELETE_NOTE, ADD_NOTE, MOVED_NOTE_TO_DB } from './NoteActions';
 import { DELETE_LANE } from '../Lane/LaneActions';
 import _ from 'lodash';
 
@@ -18,10 +18,11 @@ export default function notes(state = initialState, action) {
       const reducedNotes = _.filter(state, note => _.indexOf(action.notesId, note._id) < 0);
       let returnState = {};
       reducedNotes.forEach(note => {
-        returnState = Object.assign(returnState, { [note.id]: note });
+        returnState = { ...returnState, [note.id]: note };
       });
       return returnState;
     }
+    case MOVED_NOTE_TO_DB:
     default:
       return state;
   }

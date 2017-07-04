@@ -6,6 +6,7 @@ export const DELETE_NOTE = 'DELETE_NOTE';
 export const ADD_NOTE = 'ADD_NOTE';
 export const MOVE_NOTE = 'MOVE_NOTE';
 export const ATTACH_NOTE = 'ATTACH_NOTE';
+export const MOVED_NOTE_TO_DB = 'MOVED_NOTE_TO_DB';
 
 export function createNote(note) {
   return { type: CREATE_NOTE, note };
@@ -65,5 +66,20 @@ export function moveNote(
     sourceNoteId,
     targetLaneId,
     sourceLaneId,
+  };
+}
+
+export function moveNoteServ(
+  sourceLaneNotes,
+  targetLaneNotes,
+  sourceLaneId,
+  targetLaneId
+) {
+  return dispatch => {
+    callApi('lanes', 'put', { sourceLaneNotes, targetLaneNotes, sourceLaneId, targetLaneId }).then(() => {
+      return dispatch({
+        type: MOVED_NOTE_TO_DB,
+      });
+    });
   };
 }
