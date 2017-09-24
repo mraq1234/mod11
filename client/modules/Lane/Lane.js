@@ -67,7 +67,7 @@ class Lane extends Component {
         </div>
         <NoteList laneId={lane.id} />
         <div className={styles.LaneAddNote}>
-          <button onClick={() => addNoteServ(laneId)}>
+          <button onClick={() => addNoteServ(laneId, this.props.idToken)}>
             ADD TASK
           </button>
         </div>
@@ -77,6 +77,7 @@ class Lane extends Component {
 }
 
 Lane.propTypes = {
+  idToken: propTypes.string,
   lane: propTypes.object,
   laneNotes: propTypes.array,
   deleteLaneServ: propTypes.func,

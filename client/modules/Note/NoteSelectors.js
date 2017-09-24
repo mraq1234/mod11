@@ -1,7 +1,11 @@
 import { createSelector } from 'reselect';
 
-const notesSelector = state => state.notes;
-const laneSelector = (state, props) => state.lanes[props.laneId];
+const notesSelector = state => {
+  return state.notes;
+};
+const laneSelector = (state, props) => {
+  return state.lanes[props.laneId];
+};
 
 export const getLaneNotes = createSelector(
   [laneSelector,
@@ -10,4 +14,4 @@ export const getLaneNotes = createSelector(
     return lane ? lane.notes.map(noteId => selectedNotes[noteId]) : [];
   }
 );
-
+//

@@ -1,5 +1,7 @@
+import Kanban from '../models/kanban';
 import Lane from '../models/lane';
 import uuid from 'uuid/v4';
+import _ from 'lodash';
 
 export function addLane(req, res) {
   if (!req.body.name) {
@@ -14,19 +16,37 @@ export function addLane(req, res) {
     if (err) {
       res.status(500).send(err);
     }
-    res.json({ saved });
+    Kanban.findOne({ id: req.params.kanbanId })
+    .then(kanban => {
+      kanban.lanes.push(saved._id);
+      return kanban.save();
+    })
+    .then(() => {
+      res.json({ saved, kanbanId: req.params.kanbanId });
+    });
   });
 }
 
 export function getLanes(req, res) {
-  Lane
-    .find()
-    .exec((err, lanes) => {
-      if (err) {
-        res.status(500).send(err);
-      }
-      res.json({ lanes });
-    });
+  Kanban.findOne({ id: req.params.kanbanId }).exec((err, kanban) => {
+    if (err) res.status(500).send(err);
+    Lane
+      .find({ _id: { $in: kanban.lanes } })
+      .exec((error, lanes) => {
+        if (error) {
+          res.status(500).send(error);
+        }
+
+        const returnLanes = [];
+        if (kanban.lanes) {
+          kanban.lanes.forEach(element => {
+            returnLanes.push(_.filter(lanes, { _id: element })[0]);
+          });
+        }
+
+        res.json({ lanes: returnLanes });
+      });
+  });
 }
 
 export function deleteLane(req, res) {
@@ -84,4 +104,3 @@ export function updateLaneNotes(req, res) {
   })
   .catch((error) => { res.status(500).send(error); });
 }
-

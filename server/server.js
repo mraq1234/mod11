@@ -3,7 +3,6 @@ import compression from 'compression';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import path from 'path';
-import IntlWrapper from '../client/modules/Intl/IntlWrapper';
 
 // Webpack Requirements
 import webpack from 'webpack';
@@ -32,10 +31,17 @@ import Helmet from 'react-helmet';
 // Import required modules
 import routes from '../client/routes';
 import { fetchComponentData } from './util/fetchData';
+import kanbans from './routes/kanban.routes';
 import lanes from './routes/lane.routes';
 import notes from './routes/note.routes';
 // import dummyData from './dummyData';
 import serverConfig from './config';
+import jwt from 'express-jwt';
+
+const authCheck = jwt({
+  secret: process.env.AUTH0_CLIENT_SECRET,
+  audience: process.env.AUTH0_CLIENT_ID,
+});
 
 // Set native promises as mongoose promise
 mongoose.Promise = global.Promise;
@@ -55,17 +61,31 @@ mongoose.connect(serverConfig.mongoURL, (error) => {
 app.use(compression());
 app.use(bodyParser.json({ limit: '20mb' }));
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: false }));
-app.use(Express.static(path.resolve(__dirname, '../dist')));
+app.use(Express.static(path.resolve(__dirname, '../dist/client')));
+app.use('/api', authCheck);
+app.use('/api', function (err, req, res, next) { // eslint-disable-line func-names, prefer-arrow-callback
+  if (err) {
+    res.status(err.status).send({ message: err.message });
+    console.error('Authentication error: ', err.message); // eslint-disable-line no-console
+    return;
+  }
+  next();
+});
+app.use('/api', kanbans);
 app.use('/api', lanes);
 app.use('/api', notes);
 // Render Initial HTML
 const renderFullPage = (html, initialState) => {
   const head = Helmet.rewind();
-
+  // process.env.webpackAssets = JSON.stringify(require('../dist/manifest.json'));
+  // process.env.webpackChunkAssets = JSON.stringify(require('../dist/chunk-manifest.json'));
   // Import Manifests
+  console.log('server side Assets: ', process.env.webpackAssets);
   const assetsManifest = process.env.webpackAssets && JSON.parse(process.env.webpackAssets);
   const chunkManifest = process.env.webpackChunkAssets && JSON.parse(process.env.webpackChunkAssets);
-
+  // const assetsManifest = JSON.stringify(require('../dist/manifest.json'));
+  // const chunkManifest = JSON.stringify(require('../dist/chunk-manifest.json'));
+  console.log('server side Assets: ', assetsManifest);
   return `
     <!doctype html>
     <html>
@@ -124,9 +144,7 @@ app.use((req, res, next) => {
       .then(() => {
         const initialView = renderToString(
           <Provider store={store}>
-            <IntlWrapper>
-              <RouterContext {...renderProps} />
-            </IntlWrapper>
+            <RouterContext {...renderProps} />
           </Provider>
         );
         const finalState = store.getState();

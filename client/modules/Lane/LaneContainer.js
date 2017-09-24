@@ -1,10 +1,12 @@
 import { connect } from 'react-redux';
 import Lane from './Lane';
-import { deleteLaneServ, updateLaneServ, moveLane } from './LaneActions';
+import { deleteLaneServ, updateLaneServ, moveLane, moveLaneServ } from './LaneActions';
 import { addNoteServ, moveNote } from '../Note/NoteActions';
 import { compose } from 'redux';
 import { DropTarget, DragSource } from 'react-dnd';
 import ItemTypes from '../Kanban/itemTypes';
+import { getIdToken } from '../User/UserSelectors';
+
 
 const noteTarget = {
   hover(targetProps, monitor) {
@@ -36,6 +38,15 @@ const laneSource = {
   isDragging(props, monitor) {
     return props.lane.id === monitor.getItem().laneId;
   },
+  endDrag(props) {
+    props.moveLaneServ(props.kanbanId, props.lanesIds);
+  },
+};
+
+const mapStateToProps = (state) => {
+  return {
+    idToken: getIdToken(state),
+  };
 };
 
 const mapDispatchToProps = {
@@ -44,10 +55,11 @@ const mapDispatchToProps = {
   updateLaneServ,
   moveNote,
   moveLane,
+  moveLaneServ,
 };
 
 export default compose(
-  connect(null, mapDispatchToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   DragSource(ItemTypes.LANE, laneSource, (connect, monitor) => ({ // eslint-disable-line
     connectDragPreview: connect.dragPreview(),
     connectDragSource: connect.dragSource(),

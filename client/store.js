@@ -3,13 +3,16 @@
  */
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import DevTools from './modules/App/components/DevTools';
+import DevTools from './components/DevTools';
 import rootReducer from './reducers';
+import createSagaMiddleware from 'redux-saga';
+import rootSaga from './sagas';
 
-export function configureStore(initialState = {}) {
+export function configureStore() {
   // Middleware and store enhancers
+  const sagaMiddleware = createSagaMiddleware();
   const enhancers = [
-    applyMiddleware(thunk),
+    applyMiddleware(thunk, sagaMiddleware),
   ];
 
   if (process.env.CLIENT && process.env.NODE_ENV === 'development') {
@@ -17,7 +20,7 @@ export function configureStore(initialState = {}) {
     enhancers.push(window.devToolsExtension ? window.devToolsExtension() : DevTools.instrument());
   }
 
-  const store = createStore(rootReducer, initialState, compose(...enhancers));
+  const store = createStore(rootReducer, compose(...enhancers));
   // For hot reloading reducers
   if (module.hot) {
     // Enable Webpack hot module replacement for reducers
@@ -26,6 +29,6 @@ export function configureStore(initialState = {}) {
       store.replaceReducer(nextReducer);
     });
   }
-
+  sagaMiddleware.run(rootSaga);
   return store;
 }

@@ -2,7 +2,8 @@ import { Router } from 'express';
 import * as LaneController from '../controllers/lane.controller';
 import noteRouter from './note.routes';
 
-const router = new Router();
+const router = new Router({ mergeParams: true });
+
 router.use('/lanes/:laneId/', noteRouter);
 
 router.route('/lanes').post(LaneController.addLane);

@@ -5,6 +5,7 @@ import {
   UPDATE_LANE,
   DELETE_LANE,
   MOVE_LANE,
+  MOVED_LANE_TO_DB,
 } from './LaneActions';
 import { ADD_NOTE, DELETE_NOTE, MOVE_NOTE } from '../Note/NoteActions';
 import _ from 'lodash';
@@ -94,6 +95,7 @@ export default function lanes(state = initialState, action) {
       });
       return returnState;
     }
+    case MOVED_LANE_TO_DB:
     default:
       return state;
   }

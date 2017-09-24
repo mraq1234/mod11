@@ -9,6 +9,8 @@ export const CREATE_LANES = 'CREATE_LANES';
 export const UPDATE_LANE = 'UPDATE_LANE';
 export const DELETE_LANE = 'DELETE_LANE';
 export const MOVE_LANE = 'MOVE_LANE';
+export const RECYCLE_STATE = 'RECYCLE_STATE';
+export const MOVED_LANE_TO_DB = 'MOVED_LANE_TO_DB';
 
 export function createLanes(lanes) {
   return {
@@ -17,28 +19,36 @@ export function createLanes(lanes) {
   };
 }
 
-export function fetchLanes() {
+export function recycleState() {
+  return {
+    type: RECYCLE_STATE,
+  };
+}
+
+export function fetchLanes(kanbanId, idToken) {
   return (dispatch) => {
-    return callApi('lanes', 'get').then(res => {
+    return callApi(`kanbans/${kanbanId}/lanes`, 'get', undefined, idToken).then(res => {
       const normalized = normalize(res.lanes, lanesSchema);
       const { lanes, notes } = normalized.entities;
-      dispatch(createLanes(lanes));
+      dispatch(recycleState());
       dispatch(createNotes(notes));
+      dispatch(createLanes(lanes));
     });
   };
 }
 
-export function createLane(lane) {
+export function createLane(lane, kanbanId) {
   return {
     type: CREATE_LANE,
     lane,
+    kanbanId,
   };
 }
 
-export function createLaneServ(lane) {
+export function createLaneServ(lane, kanbanId, idToken) {
   return (dispatch) => {
-    return callApi('lanes', 'post', lane).then(res => {
-      dispatch(createLane(res.saved));
+    return callApi(`kanbans/${kanbanId}/lanes`, 'post', lane, idToken).then(res => {
+      dispatch(createLane(res.saved, res.kanbanId));
     });
   };
 }
@@ -77,6 +87,16 @@ export function deleteLaneServ(id) {
 export function moveLane(sourceLaneId, targetLaneId) {
   return {
     type: MOVE_LANE, sourceLaneId, targetLaneId,
+  };
+}
+
+export function moveLaneServ(kanbanId, lanes) {
+  return (dispatch) => {
+    return callApi(`/kanbans/${kanbanId}`, 'put', { lanes }).then(() => {
+      return dispatch({
+        type: MOVED_LANE_TO_DB,
+      });
+    });
   };
 }
 

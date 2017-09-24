@@ -3,8 +3,9 @@
  */
 
 if (process.env.NODE_ENV === 'production') {
-  process.env.webpackAssets = JSON.stringify(require('./dist/manifest.json'));
-  process.env.webpackChunkAssets = JSON.stringify(require('./dist/chunk-manifest.json'));
+  process.env.webpackAssets = JSON.stringify(require('./dist/client/manifest.json'));
+  process.env.webpackChunkAssets = JSON.stringify(require('./dist/client/chunk-manifest.json'));
+  console.log('entry point reached! = ', process.env.webpackAssets);
   // In production, serve the webpacked server file.
   require('./dist/server.bundle.js');
 } else {

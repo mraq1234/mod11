@@ -18,7 +18,7 @@ export default class Edit extends Component {
     <button
       className={styles.delete}
       onClick={this.props.onDelete}
-    >×
+    >{this.props.deleteButtonTxt ? this.props.deleteButtonTxt : 'x'}
     </button>;
   renderEdit = () =>
     <input
@@ -48,6 +48,7 @@ export default class Edit extends Component {
   }
 }
 
+
 Edit.propTypes = {
   laneProp: PropTypes.object,
   value: PropTypes.string,
@@ -55,5 +56,6 @@ Edit.propTypes = {
   onValueClick: PropTypes.func,
   onDelete: PropTypes.func,
   editing: PropTypes.bool,
+  deleteButtonTxt: PropTypes.string,
 };
 

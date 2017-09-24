@@ -44,11 +44,11 @@ export function addNote(note, laneId) {
   return { type: ADD_NOTE, note, laneId };
 }
 
-export function addNoteServ(laneId) {
+export function addNoteServ(laneId, idToken) {
   return dispatch => {
     return callApi(`lanes/${laneId}/notes`, 'post', {
       task: 'new task',
-    }).then(res => {
+    }, idToken).then(res => {
       return dispatch(addNote(res.saved, res.laneId));
     });
   };

@@ -35,7 +35,7 @@ export function updateNoteTask(req, res) {
 }
 
 export function deleteNote(req, res) {
-  Note.findOneAndRemove({ id: req.params.noteId }, req).exec((err, note) => {
+  Note.findOneAndRemove({ id: req.params.noteId }).exec((err, note) => {
     if (err) res.status(500).send(err);
     Lane.findOne({ id: req.params.laneId })
       .then(lane => {
